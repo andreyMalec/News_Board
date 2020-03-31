@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#6200EE</color>
-    <color name="colorPrimaryDark">#3700B3</color>
-    <color name="colorAccent">#03DAC5</color>
+    <color name="colorPrimary">#79c5f2</color>
+    <color name="colorPrimaryDark">#79c5f2</color>
+    <color name="colorAccent">#c6f8ff</color>
+
+    <color name="newsBackgroundColor">#eaf1f2</color>
+    <color name="newsDescriptionColor">#dce2e2</color>
+    <color name="newsTextColor">#333</color>
+    <color name="newsLinkColor">#22f</color>
+
 </resources>

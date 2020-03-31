@@ -22,7 +22,7 @@ data class ApiRequestTop(
     override val page: Int = 1
 ): ApiRequest
 
-data class ApiRequestEverything (
+data class ApiRequestEverything(
     override val q: String? = null,
     /** This should be in ISO 8601 format (e.g. 2020-03-28 or 2020-03-28T14:21:35) */
     val from: String? = null,

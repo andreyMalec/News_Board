@@ -1,25 +1,46 @@
 package com.proj.newsboard.api
 
 import com.google.gson.Gson
-import com.proj.newsboard.dataClass.News
+import com.proj.newsboard.dataClass.Article
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.io.IOException
 import java.net.URL
 
 class NewsApi(private val apiKey: String): Api {
-    private val baseUrl = "http://newsapi.org/v2/"
+    private val baseUrl = "https://newsapi.org/v2/"
 
     @Throws(IOException::class)
-    override fun getEverything(request: ApiRequestEverything): List<News> {
+    override fun getEverything(
+        request: ApiRequestEverything,
+        onDataReceived: (data: List<Article>) -> Unit
+    ) {
         val requestUrl = makeUrlEverything(request)
+        GlobalScope.launch(Dispatchers.Main) {
+            val response = withContext(Dispatchers.Default) {
+                getResponse(requestUrl)
+            }
 
-        return getResponse(requestUrl).articles
+            withContext(Dispatchers.IO) {
+                onDataReceived(response.articles)
+            }
+        }
     }
 
     @Throws(IOException::class)
-    override fun getTop(request: ApiRequestTop): List<News> {
+    override fun getTop(request: ApiRequestTop, onDataReceived: (data: List<Article>) -> Unit) {
         val requestUrl = makeUrlTop(request)
+        GlobalScope.launch(Dispatchers.Main) {
+            val response = withContext(Dispatchers.Default) {
+                getResponse(requestUrl)
+            }
 
-        return getResponse(requestUrl).articles
+            withContext(Dispatchers.IO) {
+                onDataReceived(response.articles)
+            }
+        }
     }
 
     private fun makeUrlEverything(request: ApiRequestEverything): String {
