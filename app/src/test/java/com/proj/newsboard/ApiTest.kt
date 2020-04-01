@@ -11,7 +11,9 @@ class ApiTest {
 		val api: Api = NewsApi("1510c682a5a04c4f8eb696f6394c9844")
 
 		val request = ApiRequestTop(country = Country.RussianFederation)
-		val l = api.getTop(request)
+		val l = api.getTop(request) {
+
+		}
 	}
 
 	@Test
@@ -19,6 +21,8 @@ class ApiTest {
 		val api: Api = NewsApi("1510c682a5a04c4f8eb696f6394c9844")
 
 		val request = ApiRequestEverything(q = "putin")
-		val l = api.getEverything(request)
+		val l = api.getEverything(request) {
+
+		}
 	}
 }

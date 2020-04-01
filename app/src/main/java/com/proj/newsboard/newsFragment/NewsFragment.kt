@@ -29,6 +29,7 @@ class NewsFragment: Fragment() {
 
         newsRecycler.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
         newsRecycler.adapter = adapter
+        newsRecycler.scrollToPosition(0)
 
         swipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary)
         swipeRefreshLayout.setOnRefreshListener {

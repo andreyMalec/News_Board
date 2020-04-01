@@ -9,6 +9,8 @@ interface ApiRequest {
     val q: String?
     val sources: String?
     val page: Int
+
+    fun nextPage(): ApiRequest
 }
 
 data class ApiRequestTop(
@@ -20,7 +22,11 @@ data class ApiRequestTop(
     /** @Note: you can't mix this param with the [sources] param. */
     val country: Country? = null,
     override val page: Int = 1
-): ApiRequest
+): ApiRequest {
+    override fun nextPage(): ApiRequestTop {
+        return ApiRequestTop(q, sources, category, country, page + 1)
+    }
+}
 
 data class ApiRequestEverything(
     override val q: String? = null,
@@ -34,4 +40,8 @@ data class ApiRequestEverything(
     /** @Default: all languages returned. */
     val language: Language? = null,
     override val page: Int = 1
-): ApiRequest
+): ApiRequest {
+    override fun nextPage(): ApiRequestEverything {
+        return ApiRequestEverything(q, from, to, sources, sortBy, language, page + 1)
+    }
+}

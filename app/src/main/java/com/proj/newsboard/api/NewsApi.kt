@@ -1,5 +1,6 @@
 package com.proj.newsboard.api
 
+import android.net.Uri
 import com.google.gson.Gson
 import com.proj.newsboard.dataClass.Article
 import kotlinx.coroutines.Dispatchers
@@ -7,7 +8,9 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.io.IOException
+import java.net.URI
 import java.net.URL
+import java.net.URLEncoder
 
 class NewsApi(private val apiKey: String): Api {
     private val baseUrl = "https://newsapi.org/v2/"
@@ -68,7 +71,7 @@ class NewsApi(private val apiKey: String): Api {
     private fun prepareUrl(request: ApiRequest): String {
         var requestUrl = ""
 
-        if (request.q != null) requestUrl += "q=" + request.q + "&"
+        if (request.q != null) requestUrl += "q=" + URLEncoder.encode(request.q, "utf-8") + "&"
         requestUrl += "page=" + request.page + "&"
         requestUrl += "apiKey=" + apiKey
 
@@ -76,8 +79,12 @@ class NewsApi(private val apiKey: String): Api {
     }
 
     private fun getResponse(requestUrl: String): APIResponse {
-        val stringResponse = URL(requestUrl).readText()
+        return try {
+            val stringResponse = URL(requestUrl).readText()
 
-        return Gson().fromJson(stringResponse, APIResponse::class.java)
+            Gson().fromJson(stringResponse, APIResponse::class.java)
+        } catch (e: Exception) {
+            APIResponse(e.message.toString(), 0, listOf())
+        }
     }
 }
