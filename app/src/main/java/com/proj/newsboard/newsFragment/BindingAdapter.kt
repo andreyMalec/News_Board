@@ -13,7 +13,9 @@ import com.squareup.picasso.Picasso
 object BindingAdapter {
     @BindingAdapter("normalizeDate")
     @JvmStatic
-    fun normalizeDate(textView: TextView, date: String) {
+    fun normalizeDate(textView: TextView, date: String?) {
+        if (date == null) return
+
         val splitted = date.dropLast(4).split("T")
         val normalizedTime = splitted[1]
         val normalizedDay = splitted[0].split("-").asReversed().joinToString("-")
@@ -29,7 +31,9 @@ object BindingAdapter {
 
     @BindingAdapter("underlinedText")
     @JvmStatic
-    fun underlinedText(textView: TextView, text: String) {
+    fun underlinedText(textView: TextView, text: String?) {
+        if (text == null) return
+
         val underlinedText = "<u>" + text + "</u>"
         textView.text = HtmlCompat.fromHtml(underlinedText, HtmlCompat.FROM_HTML_MODE_LEGACY)
     }

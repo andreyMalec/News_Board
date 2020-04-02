@@ -11,5 +11,5 @@ data class ArticleData(
     @PrimaryKey
     val url: String,
     val urlToImage: String?,
-    val publishedAt: String
+    val publishedAt: String?
 )

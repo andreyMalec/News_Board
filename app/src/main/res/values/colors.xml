@@ -2,7 +2,12 @@
 <resources>
     <color name="colorPrimary">#79c5f2</color>
     <color name="colorPrimaryDark">#79c5f2</color>
-    <color name="colorAccent">#c6f8ff</color>
+    <color name="colorAccent">#40cfef</color>
+
+    <color name="backgroundLightColor">#f2f2f2</color>
+    <color name="backgroundColor">#ededed</color>
+    <color name="backgroundDarkColor">#aaa</color>
+    <color name="backgroundDeepDarkColor">#666</color>
 
     <color name="newsBackgroundColor">#eaf1f2</color>
     <color name="newsDescriptionColor">#dce2e2</color>
