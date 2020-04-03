@@ -6,35 +6,38 @@ import com.proj.newsboard.api.Api
 import com.proj.newsboard.api.ApiRequest
 import com.proj.newsboard.api.ApiRequestEverything
 import com.proj.newsboard.api.ApiRequestTop
+import com.proj.newsboard.dataClass.Article
 import com.proj.newsboard.extensions.toArticleDataList
 import com.proj.newsboard.localArticlesDb.ArticleData
 import com.proj.newsboard.localArticlesDb.ArticlesDatabase
+import java.util.concurrent.Executors
 
-class ArticleBoundaryCallback(request: ApiRequest, private val api: Api, private val db: ArticlesDatabase): PagedList.BoundaryCallback<ArticleData>() {
-    private var endOfTop = false
-    private var endOfEverything = false
-    private var requestTop = if (request is ApiRequestTop) request else null
-    private var requestEverything = if (request is ApiRequestEverything) request else null
+class ArticleBoundaryCallback(private val request: ApiRequest, private val api: Api, private val db: ArticlesDatabase): PagedList.BoundaryCallback<ArticleData>() {
+    private var endOfResponse = false
+    private var requestPaged = request
+
+    private val executor = Executors.newSingleThreadExecutor()
+    private val helper = PagingRequestHelper(executor)
 
     override fun onZeroItemsLoaded() {
-
+        helper.runIfNotRunning(PagingRequestHelper.RequestType.INITIAL) { helperCallback ->
+            api.getNews(request) {
+                endOfResponse = it.size < 20
+                db.newsDataDao().cleanInsertToDb(it.toArticleDataList())
+                helperCallback.recordSuccess()
+            }
+        }
     }
 
     override fun onItemAtEndLoaded(itemAtEnd: ArticleData) {
-        if (requestTop != null) {
-            if (endOfTop) return
-            requestTop = requestTop!!.nextPage()
-            api.getTop(requestTop!!) {
-                if (it.size < 20) endOfTop = true
-                db.newsDataDao().insertAll(it.toArticleDataList())
+        if (!endOfResponse)
+            helper.runIfNotRunning(PagingRequestHelper.RequestType.AFTER) { helperCallback ->
+                requestPaged = requestPaged.nextPage()
+                api.getNews(requestPaged) {
+                    endOfResponse = it.size < 20
+                    db.newsDataDao().insertToDb(it.toArticleDataList())
+                    helperCallback.recordSuccess()
+                }
             }
-        } else if (requestEverything != null) {
-            if (endOfEverything) return
-            requestEverything = requestEverything!!.nextPage()
-            api.getEverything(requestEverything!!.nextPage()) {
-                if (it.size < 20) endOfEverything = true
-                db.newsDataDao().insertAll(it.toArticleDataList())
-            }
-        }
     }
 }

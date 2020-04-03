@@ -19,4 +19,17 @@ interface ArticlesDao {
 
     @Query("DELETE from ArticleData")
     fun deleteAll()
+
+    fun cleanInsertToDb(articles: List<ArticleData>) {
+        if (articles.isNotEmpty()) {
+            deleteAll()
+            insertAll(articles)
+        }
+    }
+
+    fun insertToDb(articles: List<ArticleData>) {
+        if (articles.isNotEmpty()) {
+            insertAll(articles)
+        }
+    }
 }

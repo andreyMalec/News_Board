@@ -16,25 +16,24 @@ class NewsApi(private val apiKey: String): Api {
     private val baseUrl = "https://newsapi.org/v2/"
 
     @Throws(IOException::class)
-    override fun getEverything(
-        request: ApiRequestEverything,
-        onDataReceived: (data: List<Article>) -> Unit
-    ) {
-        val requestUrl = makeUrlEverything(request)
-        GlobalScope.launch(Dispatchers.Main) {
-            val response = withContext(Dispatchers.Default) {
-                getResponse(requestUrl)
-            }
-
-            withContext(Dispatchers.IO) {
-                onDataReceived(response.articles)
-            }
-        }
+    override fun getEverything(request: ApiRequestEverything, onDataReceived: (data: List<Article>) -> Unit) {
+        makeRequest(makeUrlEverything(request), onDataReceived)
     }
 
     @Throws(IOException::class)
     override fun getTop(request: ApiRequestTop, onDataReceived: (data: List<Article>) -> Unit) {
-        val requestUrl = makeUrlTop(request)
+        makeRequest(makeUrlTop(request), onDataReceived)
+    }
+
+    @Throws(IOException::class)
+    override fun getNews(request: ApiRequest, onDataReceived: (data: List<Article>) -> Unit) {
+        val requestUrl = if (request is ApiRequestTop) makeUrlTop(request)
+        else makeUrlEverything(request as ApiRequestEverything)
+
+        makeRequest(requestUrl, onDataReceived)
+    }
+
+    private fun makeRequest(requestUrl: String, onDataReceived: (data: List<Article>) -> Unit) {
         GlobalScope.launch(Dispatchers.Main) {
             val response = withContext(Dispatchers.Default) {
                 getResponse(requestUrl)

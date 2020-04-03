@@ -32,17 +32,19 @@ class NewsViewModel(app: Application): AndroidViewModel(app) {
     private val api = ApiFactory.create(app.applicationContext)
 
     init {
-        val config = Config.Builder().setMaxSize(articlesMaxSize).setPageSize(articlesPageSize).build()
+        val config = Config.Builder().apply {
+            setMaxSize(articlesMaxSize)
+            setPageSize(articlesPageSize)
+            setEnablePlaceholders(false)
+        }.build()
         lastApiRequest = ApiRequestTop(country = Country.RussianFederation, category = Category.Technology)
         articles = LivePagedListBuilder(db.newsDataDao().getAll(), config)
             .setBoundaryCallback(ArticleBoundaryCallback(lastApiRequest, api, db))
             .build()
-
-        updateNews()
     }
 
     fun updateNews() {
-        api.getTop(lastApiRequest as ApiRequestTop) { articles ->
+        api.getNews(lastApiRequest) { articles ->
             if (articles.isNotEmpty()) {
                 db.newsDataDao().deleteAll()
                 db.newsDataDao().insertAll(articles.toArticleDataList())
