@@ -7,5 +7,9 @@ enum class Category(val value: String) {
     Health("health"),
     Science("science"),
     Sports("sports"),
-    Technology("technology")
+    Technology("technology");
+
+    companion object {
+        fun from(findValue: String): Category = Category.values().first { it.value == findValue }
+    }
 }

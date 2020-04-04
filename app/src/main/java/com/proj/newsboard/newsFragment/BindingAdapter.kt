@@ -8,6 +8,11 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.text.HtmlCompat
 import androidx.databinding.BindingAdapter
+import androidx.interpolator.view.animation.FastOutLinearInInterpolator
+import androidx.transition.ChangeBounds
+import androidx.transition.Fade
+import androidx.transition.TransitionManager
+import androidx.transition.TransitionSet
 import com.squareup.picasso.Picasso
 
 object BindingAdapter {
@@ -47,6 +52,13 @@ object BindingAdapter {
         }
 
         fun onTitleClick(view: View) {
+            val transition = TransitionSet().apply {
+                interpolator = FastOutLinearInInterpolator()
+                addTransition(Fade())
+                addTransition(ChangeBounds())
+            }
+            if (!descriptionVisible)
+                TransitionManager.beginDelayedTransition(view.parent as ViewGroup, transition)
             descriptionVisible = !descriptionVisible
             (view.parent as ViewGroup).getChildAt(1).visibility = if (descriptionVisible) View.VISIBLE else View.GONE
         }

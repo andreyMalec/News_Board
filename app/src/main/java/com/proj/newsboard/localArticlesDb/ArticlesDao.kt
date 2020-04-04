@@ -5,6 +5,7 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy.IGNORE
 import androidx.room.Query
+import androidx.room.Transaction
 
 @Dao
 interface ArticlesDao {
@@ -20,15 +21,10 @@ interface ArticlesDao {
     @Query("DELETE from ArticleData")
     fun deleteAll()
 
+    @Transaction
     fun cleanInsertToDb(articles: List<ArticleData>) {
         if (articles.isNotEmpty()) {
             deleteAll()
-            insertAll(articles)
-        }
-    }
-
-    fun insertToDb(articles: List<ArticleData>) {
-        if (articles.isNotEmpty()) {
             insertAll(articles)
         }
     }

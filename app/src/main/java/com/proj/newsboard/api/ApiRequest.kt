@@ -11,6 +11,12 @@ interface ApiRequest {
     val page: Int
 
     fun nextPage(): ApiRequest
+
+    fun firstPage(): ApiRequest
+
+    fun clone(): ApiRequest
+
+    fun toMap(): Map<String, String?>
 }
 
 data class ApiRequestTop(
@@ -25,6 +31,25 @@ data class ApiRequestTop(
 ): ApiRequest {
     override fun nextPage(): ApiRequestTop {
         return ApiRequestTop(q, sources, category, country, page + 1)
+    }
+
+    override fun firstPage(): ApiRequestTop {
+        return ApiRequestTop(q, sources, category, country, 1)
+    }
+
+    override fun clone(): ApiRequestTop {
+        return ApiRequestTop(q, sources, category, country, page)
+    }
+
+    override fun toMap(): Map<String, String?> {
+        val map = mutableMapOf<String, String?>()
+        if (q != null) map["q"] = q
+        if (sources != null) map["sources"] = sources
+        if (category != null) map["category"] = category.value
+        if (country != null) map["country"] = country.value
+        map["page"] = page.toString()
+
+        return map
     }
 }
 
@@ -43,5 +68,26 @@ data class ApiRequestEverything(
 ): ApiRequest {
     override fun nextPage(): ApiRequestEverything {
         return ApiRequestEverything(q, from, to, sources, sortBy, language, page + 1)
+    }
+
+    override fun firstPage(): ApiRequestEverything {
+        return ApiRequestEverything(q, from, to, sources, sortBy, language, 1)
+    }
+
+    override fun clone(): ApiRequestEverything {
+        return ApiRequestEverything(q, from, to, sources, sortBy, language, page)
+    }
+
+    override fun toMap(): Map<String, String?> {
+        val map = mutableMapOf<String, String?>()
+        if (q != null) map["q"] = q
+        if (sources != null) map["sources"] = sources
+        if (from != null) map["from"] = from
+        if (to != null) map["to"] = to
+        if (sortBy != null) map["sortBy"] = sortBy.value
+        if (language != null) map["language"] = language.value
+        map["page"] = page.toString()
+
+        return map
     }
 }

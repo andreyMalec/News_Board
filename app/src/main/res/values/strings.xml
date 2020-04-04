@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">News Board</string>
+
+    <string name="category_business">business</string>
+    <string name="category_entertainment">entertainment</string>
+    <string name="category_general">general</string>
+    <string name="category_health">health</string>
+    <string name="category_science">science</string>
+    <string name="category_sports">sports</string>
+    <string name="category_technology">technology</string>
 </resources>

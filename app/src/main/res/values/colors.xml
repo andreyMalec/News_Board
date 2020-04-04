@@ -6,7 +6,7 @@
 
     <color name="backgroundLightColor">#f2f2f2</color>
     <color name="backgroundColor">#ededed</color>
-    <color name="backgroundDarkColor">#aaa</color>
+    <color name="backgroundDarkColor">#ccc</color>
     <color name="backgroundDeepDarkColor">#666</color>
 
     <color name="newsBackgroundColor">#eaf1f2</color>

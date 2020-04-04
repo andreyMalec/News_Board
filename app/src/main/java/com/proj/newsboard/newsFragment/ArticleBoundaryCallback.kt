@@ -2,27 +2,31 @@ package com.proj.newsboard.newsFragment
 
 import android.util.Log
 import androidx.paging.PagedList
-import com.proj.newsboard.api.Api
-import com.proj.newsboard.api.ApiRequest
-import com.proj.newsboard.api.ApiRequestEverything
 import com.proj.newsboard.api.ApiRequestTop
-import com.proj.newsboard.dataClass.Article
+import com.proj.newsboard.api.NewsApi
+import com.proj.newsboard.extensions.getNews
 import com.proj.newsboard.extensions.toArticleDataList
 import com.proj.newsboard.localArticlesDb.ArticleData
 import com.proj.newsboard.localArticlesDb.ArticlesDatabase
 import java.util.concurrent.Executors
 
-class ArticleBoundaryCallback(private val request: ApiRequest, private val api: Api, private val db: ArticlesDatabase): PagedList.BoundaryCallback<ArticleData>() {
-    private var endOfResponse = false
-    private var requestPaged = request
-
+class ArticleBoundaryCallback(
+    var request: BoundaryCallbackRequest,
+    private val vm: NewsViewModel,
+    private val api: NewsApi,
+    private val db: ArticlesDatabase
+): PagedList.BoundaryCallback<ArticleData>() {
     private val executor = Executors.newSingleThreadExecutor()
     private val helper = PagingRequestHelper(executor)
 
     override fun onZeroItemsLoaded() {
+        Log.e("test", "onZeroItemsLoaded: ")
+        Log.e("test", "onZeroItemsLoaded: " + "loading " + (request.request as ApiRequestTop).category)
+
         helper.runIfNotRunning(PagingRequestHelper.RequestType.INITIAL) { helperCallback ->
-            api.getNews(request) {
-                endOfResponse = it.size < 20
+            api.getNews(request.request) {
+                Log.e("test", "onZeroItemsLoaded: " + "loaded ${it.size} articles from ${request.request.page} page")
+                request.request = request.request.nextPage()
                 db.newsDataDao().cleanInsertToDb(it.toArticleDataList())
                 helperCallback.recordSuccess()
             }
@@ -30,14 +34,14 @@ class ArticleBoundaryCallback(private val request: ApiRequest, private val api: 
     }
 
     override fun onItemAtEndLoaded(itemAtEnd: ArticleData) {
-        if (!endOfResponse)
-            helper.runIfNotRunning(PagingRequestHelper.RequestType.AFTER) { helperCallback ->
-                requestPaged = requestPaged.nextPage()
-                api.getNews(requestPaged) {
-                    endOfResponse = it.size < 20
-                    db.newsDataDao().insertToDb(it.toArticleDataList())
-                    helperCallback.recordSuccess()
-                }
+        Log.e("test", "onItemAtEndLoaded: " + "loading " + (request.request as ApiRequestTop).category)
+        helper.runIfNotRunning(PagingRequestHelper.RequestType.AFTER) { helperCallback ->
+            api.getNews(request.request) {
+                Log.e("test", "getNews:           " + "loaded ${it.size} articles from ${request.request.page} page")
+                request.request = request.request.nextPage()
+                db.newsDataDao().insertAll(it.toArticleDataList())
+                helperCallback.recordSuccess()
             }
+        }
     }
 }

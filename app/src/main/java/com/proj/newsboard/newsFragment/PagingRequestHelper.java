@@ -20,10 +20,12 @@ import androidx.annotation.GuardedBy;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.VisibleForTesting;
+
 import java.util.Arrays;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.Executor;
 import java.util.concurrent.atomic.AtomicBoolean;
+
 /**
  * A helper class for {@link androidx.paging.PagedList.BoundaryCallback BoundaryCallback}s and
  * {@link DataSource}s to help with tracking network requests.
@@ -104,6 +106,8 @@ import java.util.concurrent.atomic.AtomicBoolean;
 // THIS class is likely to be moved into the library in a future release. Feel free to copy it
 // from this sample.
 public class PagingRequestHelper {
+    @NonNull
+    final CopyOnWriteArrayList<Listener> mListeners = new CopyOnWriteArrayList<>();
     private final Object mLock = new Object();
     private final Executor mRetryService;
     @GuardedBy("mLock")
@@ -111,8 +115,7 @@ public class PagingRequestHelper {
             {new RequestQueue(RequestType.INITIAL),
                     new RequestQueue(RequestType.BEFORE),
                     new RequestQueue(RequestType.AFTER)};
-    @NonNull
-    final CopyOnWriteArrayList<Listener> mListeners = new CopyOnWriteArrayList<>();
+
     /**
      * Creates a new PagingRequestHelper with the given {@link Executor} which is used to run
      * retry actions.
@@ -122,6 +125,7 @@ public class PagingRequestHelper {
     public PagingRequestHelper(@NonNull Executor retryService) {
         mRetryService = retryService;
     }
+
     /**
      * Adds a new listener that will be notified when any request changes {@link Status state}.
      *
@@ -132,6 +136,7 @@ public class PagingRequestHelper {
     public boolean addListener(@NonNull Listener listener) {
         return mListeners.add(listener);
     }
+
     /**
      * Removes the given listener from the listeners list.
      *
@@ -141,6 +146,7 @@ public class PagingRequestHelper {
     public boolean removeListener(@NonNull Listener listener) {
         return mListeners.remove(listener);
     }
+
     /**
      * Runs the given {@link Request} if no other requests in the given request type is already
      * running.
@@ -176,6 +182,7 @@ public class PagingRequestHelper {
         wrapper.run();
         return true;
     }
+
     @GuardedBy("mLock")
     private StatusReport prepareStatusReportLocked() {
         Throwable[] errors = new Throwable[]{
@@ -190,10 +197,12 @@ public class PagingRequestHelper {
                 errors
         );
     }
+
     @GuardedBy("mLock")
     private Status getStatusForLocked(RequestType type) {
         return mRequestQueues[type.ordinal()].mStatus;
     }
+
     @AnyThread
     @VisibleForTesting
     void recordResult(@NonNull RequestWrapper wrapper, @Nullable Throwable throwable) {
@@ -219,11 +228,13 @@ public class PagingRequestHelper {
             dispatchReport(report);
         }
     }
+
     private void dispatchReport(StatusReport report) {
         for (Listener listener : mListeners) {
             listener.onStatusChange(report);
         }
     }
+
     /**
      * Retries all failed requests.
      *
@@ -246,189 +257,7 @@ public class PagingRequestHelper {
         }
         return retried;
     }
-    static class RequestWrapper implements Runnable {
-        @NonNull
-        final Request mRequest;
-        @NonNull
-        final PagingRequestHelper mHelper;
-        @NonNull
-        final RequestType mType;
-        RequestWrapper(@NonNull Request request, @NonNull PagingRequestHelper helper,
-                       @NonNull RequestType type) {
-            mRequest = request;
-            mHelper = helper;
-            mType = type;
-        }
-        @Override
-        public void run() {
-            mRequest.run(new Request.Callback(this, mHelper));
-        }
-        void retry(Executor service) {
-            service.execute(() -> mHelper.runIfNotRunning(mType, mRequest));
-        }
-    }
-    /**
-     * Runner class that runs a request tracked by the {@link PagingRequestHelper}.
-     * <p>
-     * When a request is invoked, it must call one of {@link Callback#recordFailure(Throwable)}
-     * or {@link Callback#recordSuccess()} once and only once. This call
-     * can be made any time. Until that method call is made, {@link PagingRequestHelper} will
-     * consider the request is running.
-     */
-    @FunctionalInterface
-    public interface Request {
-        /**
-         * Should run the request and call the given {@link Callback} with the result of the
-         * request.
-         *
-         * @param callback The callback that should be invoked with the result.
-         */
-        void run(Callback callback);
-        /**
-         * Callback class provided to the {@link #run(Callback)} method to report the result.
-         */
-        class Callback {
-            private final AtomicBoolean mCalled = new AtomicBoolean();
-            private final RequestWrapper mWrapper;
-            private final PagingRequestHelper mHelper;
-            Callback(RequestWrapper wrapper, PagingRequestHelper helper) {
-                mWrapper = wrapper;
-                mHelper = helper;
-            }
-            /**
-             * Call this method when the request succeeds and new data is fetched.
-             */
-            @SuppressWarnings("unused")
-            public final void recordSuccess() {
-                if (mCalled.compareAndSet(false, true)) {
-                    mHelper.recordResult(mWrapper, null);
-                } else {
-                    throw new IllegalStateException(
-                            "already called recordSuccess or recordFailure");
-                }
-            }
-            /**
-             * Call this method with the failure message and the request can be retried via
-             * {@link #retryAllFailed()}.
-             *
-             * @param throwable The error that occured while carrying out the request.
-             */
-            @SuppressWarnings("unused")
-            public final void recordFailure(@NonNull Throwable throwable) {
-                //noinspection ConstantConditions
-                if (throwable == null) {
-                    throw new IllegalArgumentException("You must provide a throwable describing"
-                            + " the error to record the failure");
-                }
-                if (mCalled.compareAndSet(false, true)) {
-                    mHelper.recordResult(mWrapper, throwable);
-                } else {
-                    throw new IllegalStateException(
-                            "already called recordSuccess or recordFailure");
-                }
-            }
-        }
-    }
-    /**
-     * Data class that holds the information about the current status of the ongoing requests
-     * using this helper.
-     */
-    public static final class StatusReport {
-        /**
-         * Status of the latest request that were submitted with {@link RequestType#INITIAL}.
-         */
-        @NonNull
-        public final Status initial;
-        /**
-         * Status of the latest request that were submitted with {@link RequestType#BEFORE}.
-         */
-        @NonNull
-        public final Status before;
-        /**
-         * Status of the latest request that were submitted with {@link RequestType#AFTER}.
-         */
-        @NonNull
-        public final Status after;
-        @NonNull
-        private final Throwable[] mErrors;
-        StatusReport(@NonNull Status initial, @NonNull Status before, @NonNull Status after,
-                     @NonNull Throwable[] errors) {
-            this.initial = initial;
-            this.before = before;
-            this.after = after;
-            this.mErrors = errors;
-        }
-        /**
-         * Convenience method to check if there are any running requests.
-         *
-         * @return True if there are any running requests, false otherwise.
-         */
-        public boolean hasRunning() {
-            return initial == Status.RUNNING
-                    || before == Status.RUNNING
-                    || after == Status.RUNNING;
-        }
-        /**
-         * Convenience method to check if there are any requests that resulted in an error.
-         *
-         * @return True if there are any requests that finished with error, false otherwise.
-         */
-        public boolean hasError() {
-            return initial == Status.FAILED
-                    || before == Status.FAILED
-                    || after == Status.FAILED;
-        }
-        /**
-         * Returns the error for the given request type.
-         *
-         * @param type The request type for which the error should be returned.
-         * @return The {@link Throwable} returned by the failing request with the given type or
-         * {@code null} if the request for the given type did not fail.
-         */
-        @Nullable
-        public Throwable getErrorFor(@NonNull RequestType type) {
-            return mErrors[type.ordinal()];
-        }
-        @Override
-        public String toString() {
-            return "StatusReport{"
-                    + "initial=" + initial
-                    + ", before=" + before
-                    + ", after=" + after
-                    + ", mErrors=" + Arrays.toString(mErrors)
-                    + '}';
-        }
-        @Override
-        public boolean equals(Object o) {
-            if (this == o) return true;
-            if (o == null || getClass() != o.getClass()) return false;
-            StatusReport that = (StatusReport) o;
-            if (initial != that.initial) return false;
-            if (before != that.before) return false;
-            if (after != that.after) return false;
-            // Probably incorrect - comparing Object[] arrays with Arrays.equals
-            return Arrays.equals(mErrors, that.mErrors);
-        }
-        @Override
-        public int hashCode() {
-            int result = initial.hashCode();
-            result = 31 * result + before.hashCode();
-            result = 31 * result + after.hashCode();
-            result = 31 * result + Arrays.hashCode(mErrors);
-            return result;
-        }
-    }
-    /**
-     * Listener interface to get notified by request status changes.
-     */
-    public interface Listener {
-        /**
-         * Called when the status for any of the requests has changed.
-         *
-         * @param report The current status report that has all the information about the requests.
-         */
-        void onStatusChange(@NonNull StatusReport report);
-    }
+
     /**
      * Represents the status of a Request for each {@link RequestType}.
      */
@@ -446,6 +275,7 @@ public class PagingRequestHelper {
          */
         FAILED
     }
+
     /**
      * Available request types.
      */
@@ -468,6 +298,208 @@ public class PagingRequestHelper {
          */
         AFTER
     }
+
+    /**
+     * Runner class that runs a request tracked by the {@link PagingRequestHelper}.
+     * <p>
+     * When a request is invoked, it must call one of {@link Callback#recordFailure(Throwable)}
+     * or {@link Callback#recordSuccess()} once and only once. This call
+     * can be made any time. Until that method call is made, {@link PagingRequestHelper} will
+     * consider the request is running.
+     */
+    @FunctionalInterface
+    public interface Request {
+        /**
+         * Should run the request and call the given {@link Callback} with the result of the
+         * request.
+         *
+         * @param callback The callback that should be invoked with the result.
+         */
+        void run(Callback callback);
+
+        /**
+         * Callback class provided to the {@link #run(Callback)} method to report the result.
+         */
+        class Callback {
+            private final AtomicBoolean mCalled = new AtomicBoolean();
+            private final RequestWrapper mWrapper;
+            private final PagingRequestHelper mHelper;
+
+            Callback(RequestWrapper wrapper, PagingRequestHelper helper) {
+                mWrapper = wrapper;
+                mHelper = helper;
+            }
+
+            /**
+             * Call this method when the request succeeds and new data is fetched.
+             */
+            @SuppressWarnings("unused")
+            public final void recordSuccess() {
+                if (mCalled.compareAndSet(false, true)) {
+                    mHelper.recordResult(mWrapper, null);
+                } else {
+                    throw new IllegalStateException(
+                            "already called recordSuccess or recordFailure");
+                }
+            }
+
+            /**
+             * Call this method with the failure message and the request can be retried via
+             * {@link #retryAllFailed()}.
+             *
+             * @param throwable The error that occured while carrying out the request.
+             */
+            @SuppressWarnings("unused")
+            public final void recordFailure(@NonNull Throwable throwable) {
+                //noinspection ConstantConditions
+                if (throwable == null) {
+                    throw new IllegalArgumentException("You must provide a throwable describing"
+                            + " the error to record the failure");
+                }
+                if (mCalled.compareAndSet(false, true)) {
+                    mHelper.recordResult(mWrapper, throwable);
+                } else {
+                    throw new IllegalStateException(
+                            "already called recordSuccess or recordFailure");
+                }
+            }
+        }
+    }
+
+    /**
+     * Listener interface to get notified by request status changes.
+     */
+    public interface Listener {
+        /**
+         * Called when the status for any of the requests has changed.
+         *
+         * @param report The current status report that has all the information about the requests.
+         */
+        void onStatusChange(@NonNull StatusReport report);
+    }
+
+    static class RequestWrapper implements Runnable {
+        @NonNull
+        final Request mRequest;
+        @NonNull
+        final PagingRequestHelper mHelper;
+        @NonNull
+        final RequestType mType;
+
+        RequestWrapper(@NonNull Request request, @NonNull PagingRequestHelper helper,
+                       @NonNull RequestType type) {
+            mRequest = request;
+            mHelper = helper;
+            mType = type;
+        }
+
+        @Override
+        public void run() {
+            mRequest.run(new Request.Callback(this, mHelper));
+        }
+
+        void retry(Executor service) {
+            service.execute(() -> mHelper.runIfNotRunning(mType, mRequest));
+        }
+    }
+
+    /**
+     * Data class that holds the information about the current status of the ongoing requests
+     * using this helper.
+     */
+    public static final class StatusReport {
+        /**
+         * Status of the latest request that were submitted with {@link RequestType#INITIAL}.
+         */
+        @NonNull
+        public final Status initial;
+        /**
+         * Status of the latest request that were submitted with {@link RequestType#BEFORE}.
+         */
+        @NonNull
+        public final Status before;
+        /**
+         * Status of the latest request that were submitted with {@link RequestType#AFTER}.
+         */
+        @NonNull
+        public final Status after;
+        @NonNull
+        private final Throwable[] mErrors;
+
+        StatusReport(@NonNull Status initial, @NonNull Status before, @NonNull Status after,
+                     @NonNull Throwable[] errors) {
+            this.initial = initial;
+            this.before = before;
+            this.after = after;
+            this.mErrors = errors;
+        }
+
+        /**
+         * Convenience method to check if there are any running requests.
+         *
+         * @return True if there are any running requests, false otherwise.
+         */
+        public boolean hasRunning() {
+            return initial == Status.RUNNING
+                    || before == Status.RUNNING
+                    || after == Status.RUNNING;
+        }
+
+        /**
+         * Convenience method to check if there are any requests that resulted in an error.
+         *
+         * @return True if there are any requests that finished with error, false otherwise.
+         */
+        public boolean hasError() {
+            return initial == Status.FAILED
+                    || before == Status.FAILED
+                    || after == Status.FAILED;
+        }
+
+        /**
+         * Returns the error for the given request type.
+         *
+         * @param type The request type for which the error should be returned.
+         * @return The {@link Throwable} returned by the failing request with the given type or
+         * {@code null} if the request for the given type did not fail.
+         */
+        @Nullable
+        public Throwable getErrorFor(@NonNull RequestType type) {
+            return mErrors[type.ordinal()];
+        }
+
+        @Override
+        public String toString() {
+            return "StatusReport{"
+                    + "initial=" + initial
+                    + ", before=" + before
+                    + ", after=" + after
+                    + ", mErrors=" + Arrays.toString(mErrors)
+                    + '}';
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+            StatusReport that = (StatusReport) o;
+            if (initial != that.initial) return false;
+            if (before != that.before) return false;
+            if (after != that.after) return false;
+            // Probably incorrect - comparing Object[] arrays with Arrays.equals
+            return Arrays.equals(mErrors, that.mErrors);
+        }
+
+        @Override
+        public int hashCode() {
+            int result = initial.hashCode();
+            result = 31 * result + before.hashCode();
+            result = 31 * result + after.hashCode();
+            result = 31 * result + Arrays.hashCode(mErrors);
+            return result;
+        }
+    }
+
     class RequestQueue {
         @NonNull
         final RequestType mRequestType;
@@ -479,6 +511,7 @@ public class PagingRequestHelper {
         Throwable mLastError;
         @NonNull
         Status mStatus = Status.SUCCESS;
+
         RequestQueue(@NonNull RequestType requestType) {
             mRequestType = requestType;
         }

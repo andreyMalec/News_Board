@@ -50,27 +50,32 @@
                 android:orientation="horizontal">
 
                 <RadioGroup
+                    android:id="@+id/categoryLayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center"
                     android:gravity="center"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    android:paddingTop="2dp"
+                    android:paddingBottom="2dp">
 
                     <RadioButton
-                        android:id="@+id/radioButton"
+                        android:id="@+id/generalCategory"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_margin="3dp"
                         android:background="@drawable/round_button"
                         android:button="@null"
+                        android:checked="true"
                         android:paddingLeft="12dp"
                         android:paddingTop="4dp"
                         android:paddingRight="12dp"
                         android:paddingBottom="4dp"
-                        android:checked="true"
+                        android:tag="@string/category_general"
                         android:text="General" />
 
                     <RadioButton
-                        android:id="@+id/radioButton2"
+                        android:id="@+id/entertainmentCategory"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_margin="3dp"
@@ -80,10 +85,11 @@
                         android:paddingTop="4dp"
                         android:paddingRight="12dp"
                         android:paddingBottom="4dp"
+                        android:tag="@string/category_entertainment"
                         android:text="Entertainment" />
 
                     <RadioButton
-                        android:id="@+id/radioButton3"
+                        android:id="@+id/businessCategory"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_margin="3dp"
@@ -94,10 +100,11 @@
                         android:paddingTop="4dp"
                         android:paddingRight="12dp"
                         android:paddingBottom="4dp"
+                        android:tag="@string/category_business"
                         android:text="Business" />
 
                     <RadioButton
-                        android:id="@+id/radioButton4"
+                        android:id="@+id/healthCategory"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_margin="3dp"
@@ -108,10 +115,11 @@
                         android:paddingTop="4dp"
                         android:paddingRight="12dp"
                         android:paddingBottom="4dp"
+                        android:tag="@string/category_health"
                         android:text="Health" />
 
                     <RadioButton
-                        android:id="@+id/radioButton5"
+                        android:id="@+id/scienceCategory"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_margin="3dp"
@@ -122,10 +130,11 @@
                         android:paddingTop="4dp"
                         android:paddingRight="12dp"
                         android:paddingBottom="4dp"
+                        android:tag="@string/category_science"
                         android:text="Science" />
 
                     <RadioButton
-                        android:id="@+id/radioButton6"
+                        android:id="@+id/sportsCategory"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_margin="3dp"
@@ -136,10 +145,11 @@
                         android:paddingTop="4dp"
                         android:paddingRight="12dp"
                         android:paddingBottom="4dp"
+                        android:tag="@string/category_sports"
                         android:text="Sports" />
 
                     <RadioButton
-                        android:id="@+id/radioButton8"
+                        android:id="@+id/technologyCategory"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_margin="3dp"
@@ -150,6 +160,7 @@
                         android:paddingTop="4dp"
                         android:paddingRight="12dp"
                         android:paddingBottom="4dp"
+                        android:tag="@string/category_technology"
                         android:text="Technology" />
                 </RadioGroup>
             </LinearLayout>

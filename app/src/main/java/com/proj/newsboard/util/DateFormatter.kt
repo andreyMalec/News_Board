@@ -33,7 +33,7 @@ class DateFormatter(timeForUTC0: Boolean = true) {
     }
 
     fun fromApiToNormalFormat(apiDateString: String): String {
-        val apiDateStringPrepared = apiDateString.replace("T"," ").replace("Z", "")
+        val apiDateStringPrepared = apiDateString.replace("T", " ").replace("Z", "")
         val apiDate = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", locale).parse(apiDateStringPrepared)
 
         return SimpleDateFormat("HH:mm dd-MM-yyyy", locale).format(apiDate)
