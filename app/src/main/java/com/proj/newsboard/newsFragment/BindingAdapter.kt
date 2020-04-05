@@ -13,6 +13,7 @@ import androidx.transition.ChangeBounds
 import androidx.transition.Fade
 import androidx.transition.TransitionManager
 import androidx.transition.TransitionSet
+import com.proj.newsboard.R
 import com.squareup.picasso.Picasso
 
 object BindingAdapter {
@@ -31,7 +32,8 @@ object BindingAdapter {
     @BindingAdapter("imageUrl")
     @JvmStatic
     fun imageUrl(imageView: ImageView, urlToImage: String?) {
-        Picasso.get().load(urlToImage).into(imageView)
+        if (urlToImage.isNullOrBlank()) Picasso.get().load(R.drawable.empty_image).into(imageView)
+        else Picasso.get().load(urlToImage).into(imageView)
     }
 
     @BindingAdapter("underlinedText")

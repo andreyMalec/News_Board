@@ -43,6 +43,7 @@ class ArticlesAdapter internal constructor():
         val news = getItem(position)
 
         holder.binding?.news = news
+        holder.binding?.decriptionLayout?.visibility = View.GONE
         holder.binding?.clickHandler = BindingAdapter.ClickHandler()
     }
 

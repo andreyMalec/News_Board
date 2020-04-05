@@ -1,6 +1,8 @@
 <resources>
     <string name="app_name">News Board</string>
 
+    <string name="news_search_hint">Search…</string>
+
     <string name="category_business">business</string>
     <string name="category_entertainment">entertainment</string>
     <string name="category_general">general</string>

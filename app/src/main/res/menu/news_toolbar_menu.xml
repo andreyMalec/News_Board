@@ -4,10 +4,10 @@
     xmlns:toolbar="http://schemas.android.com/tools">
 
     <item
-        android:id="@+id/app_bar_search"
+        android:id="@+id/news_search"
         android:icon="@drawable/ic_search_white_24dp"
-        android:title="Search"
-        app:actionViewClass="android.widget.SearchView"
+        android:title="tets"
+        app:actionViewClass="androidx.appcompat.widget.SearchView"
         app:showAsAction="always|collapseActionView"/>
     <item
         android:icon="@drawable/ic_date_range_white_24dp"

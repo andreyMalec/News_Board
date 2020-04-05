@@ -8,9 +8,11 @@ import androidx.paging.LivePagedListBuilder
 import androidx.paging.PagedList
 import androidx.paging.PagedList.Config
 import com.proj.newsboard.api.ApiFactory
+import com.proj.newsboard.api.ApiRequestEverything
 import com.proj.newsboard.api.ApiRequestTop
 import com.proj.newsboard.dataClass.Category
 import com.proj.newsboard.dataClass.Country
+import com.proj.newsboard.dataClass.Language
 import com.proj.newsboard.localArticlesDb.ArticleData
 import com.proj.newsboard.localArticlesDb.ArticlesDatabase
 
@@ -39,6 +41,16 @@ class NewsViewModel(app: Application): AndroidViewModel(app) {
         articles = LivePagedListBuilder(db.newsDataDao().getAll(), config)
             .setBoundaryCallback(callback)
             .build()
+    }
+
+    fun searchNews(query: String) {
+        val request = ApiRequestEverything(language = Language.Russian, q = query)
+
+        Log.e("test", "-----------------------------------------")
+        Log.e("test", "searchNews: " + "   search " + query)
+
+        boundaryCallbackRequest.request = request
+        updateNews()
     }
 
     fun loadCategory(category: Category) {

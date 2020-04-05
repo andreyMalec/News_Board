@@ -23,11 +23,7 @@ fun NewsApi.getNews(request: ApiRequest, onDataReceived: (data: List<Article>) -
         override fun onResponse(call: Call<APIResponse>, response: Response<APIResponse>) {
             GlobalScope.launch {
                 withContext(Dispatchers.IO) {
-                    try {
-                        onDataReceived(response.body()!!.articles)
-                    } catch (e: Exception) {
-                        Log.e("NewsApi", "getNews:onResponse: ", e)
-                    }
+                    onDataReceived(response.body()?.articles ?: listOf())
                 }
             }
         }

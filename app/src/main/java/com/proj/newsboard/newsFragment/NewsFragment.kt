@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.view.*
 import android.view.animation.AnimationUtils
+import androidx.appcompat.widget.SearchView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.children
 import androidx.fragment.app.Fragment
@@ -21,6 +22,25 @@ class NewsFragment: Fragment() {
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.news_toolbar_menu, menu)
+
+        val menuItem = menu.findItem(R.id.news_search)
+        val searchView = menuItem.actionView as SearchView
+        searchView.queryHint = getString(R.string.news_search_hint)
+        searchView.setOnQueryTextListener(object: SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                menuItem.collapseActionView()
+
+                if (!query.isNullOrBlank())
+                    viewModel.searchNews(query)
+
+                return false
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                return false
+            }
+        })
+
         super.onCreateOptionsMenu(menu, inflater)
     }
 
@@ -47,7 +67,7 @@ class NewsFragment: Fragment() {
         adapter.registerAdapterDataObserver(object: RecyclerView.AdapterDataObserver() {
             override fun onItemRangeInserted(positionStart: Int, itemCount: Int) {
                 if (positionStart == 0) {
-                    newsRecycler.smoothScrollToPosition(0)
+                    newsRecycler.scrollToPosition(0)
                 }
             }
         })

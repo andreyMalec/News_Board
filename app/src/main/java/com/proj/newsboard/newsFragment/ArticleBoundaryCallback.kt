@@ -21,7 +21,7 @@ class ArticleBoundaryCallback(
 
     override fun onZeroItemsLoaded() {
         Log.e("test", "onZeroItemsLoaded: ")
-        Log.e("test", "onZeroItemsLoaded: " + "loading " + (request.request as ApiRequestTop).category)
+//        Log.e("test", "onZeroItemsLoaded: " + "loading " + (request.request as ApiRequestTop).category)
 
         helper.runIfNotRunning(PagingRequestHelper.RequestType.INITIAL) { helperCallback ->
             api.getNews(request.request) {
@@ -34,7 +34,7 @@ class ArticleBoundaryCallback(
     }
 
     override fun onItemAtEndLoaded(itemAtEnd: ArticleData) {
-        Log.e("test", "onItemAtEndLoaded: " + "loading " + (request.request as ApiRequestTop).category)
+//        Log.e("test", "onItemAtEndLoaded: " + "loading " + (request.request as ApiRequestTop).category)
         helper.runIfNotRunning(PagingRequestHelper.RequestType.AFTER) { helperCallback ->
             api.getNews(request.request) {
                 Log.e("test", "getNews:           " + "loaded ${it.size} articles from ${request.request.page} page")
