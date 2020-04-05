@@ -25,7 +25,7 @@ object BindingAdapter {
         val splitted = date.dropLast(4).split("T")
         val normalizedTime = splitted[1]
         val normalizedDay = splitted[0].split("-").asReversed().joinToString("-")
-        val normalizeDate = normalizedTime + " " + normalizedDay
+        val normalizeDate = normalizedTime + "\n" + normalizedDay
         textView.text = normalizeDate
     }
 
@@ -41,15 +41,15 @@ object BindingAdapter {
     fun underlinedText(textView: TextView, text: String?) {
         if (text == null) return
 
-        val underlinedText = "<u>" + text + "</u>"
+        textView.tag = text
+        val underlinedText = "<u>" + textView.context.getString(R.string.news_link) + "</u>"
         textView.text = HtmlCompat.fromHtml(underlinedText, HtmlCompat.FROM_HTML_MODE_LEGACY)
     }
 
     class ClickHandler {
         private var descriptionVisible = false
         fun onLinkClick(view: View) {
-            view as TextView
-            val i = Intent(Intent.ACTION_VIEW, Uri.parse(view.text.toString()))
+            val i = Intent(Intent.ACTION_VIEW, Uri.parse(view.tag.toString()))
             view.context.startActivity(i)
         }
 

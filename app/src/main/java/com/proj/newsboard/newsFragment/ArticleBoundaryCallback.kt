@@ -12,7 +12,6 @@ import java.util.concurrent.Executors
 
 class ArticleBoundaryCallback(
     var request: BoundaryCallbackRequest,
-    private val vm: NewsViewModel,
     private val api: NewsApi,
     private val db: ArticlesDatabase
 ): PagedList.BoundaryCallback<ArticleData>() {

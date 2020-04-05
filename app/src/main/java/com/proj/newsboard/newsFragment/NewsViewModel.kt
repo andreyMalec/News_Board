@@ -37,7 +37,7 @@ class NewsViewModel(app: Application): AndroidViewModel(app) {
         }.build()
         val request = ApiRequestTop(country = Country.RussianFederation, category = Category.General)
         boundaryCallbackRequest = BoundaryCallbackRequest(request)
-        callback = ArticleBoundaryCallback(boundaryCallbackRequest, this, api, db)
+        callback = ArticleBoundaryCallback(boundaryCallbackRequest, api, db)
         articles = LivePagedListBuilder(db.newsDataDao().getAll(), config)
             .setBoundaryCallback(callback)
             .build()
