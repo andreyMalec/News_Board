@@ -3,6 +3,7 @@
 
     <string name="news_search_hint">Search…</string>
     <string name="news_link">source link</string>
+    <string name="date_pick">Choose date range</string>
 
     <string name="category_business">business</string>
     <string name="category_entertainment">entertainment</string>

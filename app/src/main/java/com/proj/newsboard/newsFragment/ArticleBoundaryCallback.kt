@@ -2,7 +2,6 @@ package com.proj.newsboard.newsFragment
 
 import android.util.Log
 import androidx.paging.PagedList
-import com.proj.newsboard.api.ApiRequestTop
 import com.proj.newsboard.api.NewsApi
 import com.proj.newsboard.extensions.getNews
 import com.proj.newsboard.extensions.toArticleDataList

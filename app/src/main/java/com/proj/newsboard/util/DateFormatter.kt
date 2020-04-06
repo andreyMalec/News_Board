@@ -45,7 +45,7 @@ class DateFormatter(timeForUTC0: Boolean = true) {
         return fromNormalToApiFormat(normalDate)
     }
 
-    private fun fromNormalToApiFormat(normalDate: Date): String {
+    fun fromNormalToApiFormat(normalDate: Date): String {
         val apiDateString = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", locale).format(normalDate)
 
         return apiDateString.replace(" ", "T").plus("Z")
