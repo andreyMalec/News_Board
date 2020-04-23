@@ -1,13 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout  xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
-        <variable name="news" type="com.proj.newsboard.localArticlesDb.ArticleData"/>
-        <variable name="clickHandler" type="com.proj.newsboard.newsFragment.BindingAdapter.ClickHandler"/>
-        <import type="com.proj.newsboard.newsFragment.BindingAdapter"/>
-        <import type="android.view.View"/>
+
+        <variable
+            name="news"
+            type="com.proj.newsboard.model.Article" />
+
+        <variable
+            name="clickHandler"
+            type="com.proj.newsboard.ui.newsFragment.BindingAdapter.ClickHandler" />
+
+        <import type="com.proj.newsboard.ui.newsFragment.BindingAdapter" />
+
+        <import type="android.view.View" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

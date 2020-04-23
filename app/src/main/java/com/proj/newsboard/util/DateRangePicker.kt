@@ -7,7 +7,10 @@ import com.google.android.material.datepicker.MaterialDatePicker
 import com.proj.newsboard.R
 import java.util.*
 
-class DateRangePicker(private val activity: FragmentActivity, private val onDatePicked: (startDate: String, endDate: String) -> Unit) {
+class DateRangePicker(
+    private val activity: FragmentActivity,
+    private val onDatePicked: (startDate: String, endDate: String) -> Unit
+) {
     private val millisInMonth: Long = 2592000000
 
     fun pick() {
