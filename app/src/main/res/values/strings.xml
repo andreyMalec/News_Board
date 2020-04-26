@@ -5,6 +5,10 @@
     <string name="news_link">source link</string>
     <string name="date_pick">Choose date range</string>
 
+    <string name="nav_news">News</string>
+    <string name="nav_settings">Settings</string>
+    <string name="nav_desc">Powered by NewsApi.org</string>
+
     <string name="category_business">Business</string>
     <string name="category_entertainment">Entertainment</string>
     <string name="category_general">General</string>
@@ -20,4 +24,7 @@
     <string name="tag_category_science">science</string>
     <string name="tag_category_sports">sports</string>
     <string name="tag_category_technology">technology</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
 </resources>

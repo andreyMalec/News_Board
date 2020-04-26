@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import androidx.paging.PagedListAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.proj.newsboard.databinding.NewsLayoutBinding
+import com.proj.newsboard.databinding.LayoutNewsBinding
 import com.proj.newsboard.model.Article
 
 class ArticlesAdapter:
@@ -35,7 +35,7 @@ class ArticlesAdapter:
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ArticlesViewHolder {
         context = parent.context
         val inflater = LayoutInflater.from(parent.context)
-        val binding: NewsLayoutBinding = NewsLayoutBinding.inflate(inflater, parent, false)
+        val binding: LayoutNewsBinding = LayoutNewsBinding.inflate(inflater, parent, false)
         return ArticlesViewHolder(binding.root)
     }
 
@@ -49,6 +49,6 @@ class ArticlesAdapter:
 
     inner class ArticlesViewHolder internal constructor(view: View):
         RecyclerView.ViewHolder(view) {
-        val binding: NewsLayoutBinding? = androidx.databinding.DataBindingUtil.bind(view)
+        val binding: LayoutNewsBinding? = androidx.databinding.DataBindingUtil.bind(view)
     }
 }

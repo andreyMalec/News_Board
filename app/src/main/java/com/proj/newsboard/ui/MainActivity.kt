@@ -8,6 +8,7 @@ import com.proj.newsboard.R
 import com.proj.newsboard.ui.newsFragment.NewsFragment
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.support.HasSupportFragmentInjector
+import kotlinx.android.synthetic.main.activity_main.*
 import javax.inject.Inject
 
 class MainActivity: AppCompatActivity(), FragmentManager, HasSupportFragmentInjector {
@@ -27,6 +28,15 @@ class MainActivity: AppCompatActivity(), FragmentManager, HasSupportFragmentInje
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        navView.setNavigationItemSelectedListener { item ->
+            when(item.itemId) {
+                R.id.nav_news -> {}
+                R.id.nav_settings -> {}
+            }
+            mainDrawerLayout.closeDrawers()
+            true
+        }
 
         fragmentStackPush(NewsFragment())
     }

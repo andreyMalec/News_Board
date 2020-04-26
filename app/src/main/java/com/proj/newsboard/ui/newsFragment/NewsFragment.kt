@@ -3,9 +3,11 @@ package com.proj.newsboard.ui.newsFragment
 import android.os.Bundle
 import android.view.*
 import android.view.animation.AnimationUtils
+import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.core.view.children
+import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
@@ -16,7 +18,7 @@ import com.proj.newsboard.R
 import com.proj.newsboard.di.Injectable
 import com.proj.newsboard.model.Category
 import com.proj.newsboard.util.DateRangePicker
-import kotlinx.android.synthetic.main.news_fragment.*
+import kotlinx.android.synthetic.main.fragment_news.*
 import javax.inject.Inject
 
 class NewsFragment: Fragment(), Injectable {
@@ -31,7 +33,7 @@ class NewsFragment: Fragment(), Injectable {
     private var datePicker: MenuItem? = null
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.news_toolbar_menu, menu)
+        inflater.inflate(R.menu.menu_news_toolbar, menu)
 
         val searchMenuItem = menu.findItem(R.id.news_search)
         val searchView = searchMenuItem.actionView as SearchView
@@ -69,15 +71,28 @@ class NewsFragment: Fragment(), Injectable {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.news_fragment, container, false)
+        return inflater.inflate(R.layout.fragment_news, container, false)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        (activity as AppCompatActivity).setSupportActionBar(toolbar)
-        (activity as AppCompatActivity).supportActionBar?.setDisplayShowTitleEnabled(false)
+        val main = (activity as AppCompatActivity)
+
+        main.setSupportActionBar(toolbar)
+        main.supportActionBar?.setDisplayShowTitleEnabled(false)
         setHasOptionsMenu(true)
+
+        val drawerLayout = main.findViewById<DrawerLayout>(R.id.mainDrawerLayout)
+        val drawerToggle = ActionBarDrawerToggle(
+            activity,
+            drawerLayout,
+            toolbar,
+            R.string.navigation_drawer_open,
+            R.string.navigation_drawer_close
+        )
+        drawerLayout.addDrawerListener(drawerToggle)
+        drawerToggle.syncState()
 
         viewModel.articles.observe(viewLifecycleOwner, Observer {
             adapter.submitList(it)

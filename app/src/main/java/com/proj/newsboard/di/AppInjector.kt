@@ -12,7 +12,9 @@ import dagger.android.AndroidInjection
 import dagger.android.HasActivityInjector
 import dagger.android.support.AndroidSupportInjection
 import dagger.android.support.HasSupportFragmentInjector
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 
+@ExperimentalCoroutinesApi
 object AppInjector {
     fun init(app: App) {
         DaggerAppComponent.builder()
