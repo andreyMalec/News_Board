@@ -1,5 +1,6 @@
 package com.proj.newsboard.di
 
+import com.proj.memeboard.di.Navigation
 import com.proj.newsboard.di.activity.ActivityModule
 import com.proj.newsboard.di.viewModel.ViewModelModule
 import com.proj.newsboard.repo.NewsRepo
@@ -11,7 +12,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import javax.inject.Singleton
 
 @ExperimentalCoroutinesApi
-@Module(includes = [ActivityModule::class, ViewModelModule::class])
+@Module(includes = [ActivityModule::class, ViewModelModule::class, Navigation::class])
 class AppModule {
     @Provides
     @Singleton
