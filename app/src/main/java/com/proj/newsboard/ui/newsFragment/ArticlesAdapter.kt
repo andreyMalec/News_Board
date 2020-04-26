@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.proj.newsboard.databinding.NewsLayoutBinding
 import com.proj.newsboard.model.Article
 
-class ArticlesAdapter internal constructor():
+class ArticlesAdapter:
     PagedListAdapter<Article, ArticlesAdapter.ArticlesViewHolder>(diffUtilCallback) {
     companion object {
         private val diffUtilCallback = object: DiffUtil.ItemCallback<Article>() {
@@ -40,10 +40,10 @@ class ArticlesAdapter internal constructor():
     }
 
     override fun onBindViewHolder(holder: ArticlesViewHolder, position: Int) {
-        val news = getItem(position)
+        val article = getItem(position)
 
-        holder.binding?.news = news
-        holder.binding?.decriptionLayout?.visibility = View.GONE
+        holder.binding?.article = article
+        holder.binding?.descriptionLayout?.visibility = View.GONE
         holder.binding?.clickHandler = BindingAdapter.ClickHandler()
     }
 

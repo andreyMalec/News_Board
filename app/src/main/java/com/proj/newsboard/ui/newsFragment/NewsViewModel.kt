@@ -18,19 +18,15 @@ class NewsViewModel @Inject constructor(private val newsRepo: NewsRepo): ViewMod
     private val articlesMaxSize = 80
     private val articlesPageSize = 20
 
-//    private val dateFormatter = DateFormatter()
-
     val articles: LiveData<PagedList<Article>>
     val datePickerVisibility = MutableLiveData(false)
 
-    //    private val db = ArticlesDatabase.getInstance(app.applicationContext)!!
-//    private val api = ApiFactory.create(app.applicationContext)
     private val callback: ArticleBoundaryCallback
     private val boundaryCallbackRequest: BoundaryCallbackRequest
 
     init {
         val config = Config.Builder().apply {
-//            setMaxSize(articlesMaxSize)
+            setMaxSize(articlesMaxSize)
             setPageSize(articlesPageSize)
             setEnablePlaceholders(false)
             setPrefetchDistance(articlesPageSize / 2)
@@ -60,9 +56,6 @@ class NewsViewModel @Inject constructor(private val newsRepo: NewsRepo): ViewMod
                     1
                 )
 
-            Log.e("test", "-----------------------------------------")
-            Log.e("test", "pickDateRange: " + "   pick from " + startDate + " to " + endDate)
-
             boundaryCallbackRequest.request = request
             updateNews()
         }
@@ -74,9 +67,6 @@ class NewsViewModel @Inject constructor(private val newsRepo: NewsRepo): ViewMod
             q = query
         )
 
-        Log.e("test", "-----------------------------------------")
-        Log.e("test", "searchNews: " + "   search " + query)
-
         boundaryCallbackRequest.request = request
         updateNews()
     }
@@ -86,9 +76,6 @@ class NewsViewModel @Inject constructor(private val newsRepo: NewsRepo): ViewMod
             country = Country.RussianFederation,
             category = category
         )
-
-        Log.e("test", "-----------------------------------------")
-        Log.e("test", "loadCategory: " + "     load " + category)
 
         boundaryCallbackRequest.request = request
         updateNews()

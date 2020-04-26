@@ -5,11 +5,19 @@
     <string name="news_link">source link</string>
     <string name="date_pick">Choose date range</string>
 
-    <string name="category_business">business</string>
-    <string name="category_entertainment">entertainment</string>
-    <string name="category_general">general</string>
-    <string name="category_health">health</string>
-    <string name="category_science">science</string>
-    <string name="category_sports">sports</string>
-    <string name="category_technology">technology</string>
+    <string name="category_business">Business</string>
+    <string name="category_entertainment">Entertainment</string>
+    <string name="category_general">General</string>
+    <string name="category_health">Health</string>
+    <string name="category_science">Science</string>
+    <string name="category_sports">Sports</string>
+    <string name="category_technology">Technology</string>
+
+    <string name="tag_category_business">business</string>
+    <string name="tag_category_entertainment">entertainment</string>
+    <string name="tag_category_general">general</string>
+    <string name="tag_category_health">health</string>
+    <string name="tag_category_science">science</string>
+    <string name="tag_category_sports">sports</string>
+    <string name="tag_category_technology">technology</string>
 </resources>

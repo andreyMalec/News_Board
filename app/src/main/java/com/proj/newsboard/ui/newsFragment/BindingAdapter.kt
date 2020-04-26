@@ -32,8 +32,10 @@ object BindingAdapter {
     @BindingAdapter("imageUrl")
     @JvmStatic
     fun imageUrl(imageView: ImageView, urlToImage: String?) {
-        if (urlToImage.isNullOrBlank()) Glide.with(imageView.context).load(R.drawable.empty_image).into(imageView)
-        else Glide.with(imageView.context).load(urlToImage).into(imageView)
+        if (urlToImage.isNullOrBlank())
+            imageView.visibility = View.GONE
+        else
+            Glide.with(imageView.context).load(urlToImage).into(imageView)
     }
 
     @BindingAdapter("underlinedText")
@@ -47,7 +49,8 @@ object BindingAdapter {
     }
 
     class ClickHandler {
-        private var descriptionVisible = false
+        private var isDescriptionVisible = false
+
         fun onLinkClick(view: View) {
             val i = Intent(Intent.ACTION_VIEW, Uri.parse(view.tag.toString()))
             view.context.startActivity(i)
@@ -59,10 +62,10 @@ object BindingAdapter {
                 addTransition(Fade())
                 addTransition(ChangeBounds())
             }
-            if (!descriptionVisible)
+            if (!isDescriptionVisible)
                 TransitionManager.beginDelayedTransition(view.parent as ViewGroup, transition)
-            descriptionVisible = !descriptionVisible
-            (view.parent as ViewGroup).getChildAt(1).visibility = if (descriptionVisible) View.VISIBLE else View.GONE
+            isDescriptionVisible = !isDescriptionVisible
+            (view.parent as ViewGroup).getChildAt(1).visibility = if (isDescriptionVisible) View.VISIBLE else View.GONE
         }
     }
 }

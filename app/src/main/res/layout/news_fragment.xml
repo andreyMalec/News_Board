@@ -28,7 +28,6 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?android:attr/actionBarSize"
-            android:popupTheme="@style/ThemeOverlay.AppCompat.Light"
             android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
             app:layout_scrollFlags="scroll|snap" />
 
@@ -71,8 +70,8 @@
                         android:paddingTop="4dp"
                         android:paddingRight="12dp"
                         android:paddingBottom="4dp"
-                        android:tag="@string/category_general"
-                        android:text="General" />
+                        android:tag="@string/tag_category_general"
+                        android:text="@string/category_general" />
 
                     <RadioButton
                         android:id="@+id/entertainmentCategory"
@@ -85,8 +84,8 @@
                         android:paddingTop="4dp"
                         android:paddingRight="12dp"
                         android:paddingBottom="4dp"
-                        android:tag="@string/category_entertainment"
-                        android:text="Entertainment" />
+                        android:tag="@string/tag_category_entertainment"
+                        android:text="@string/category_entertainment" />
 
                     <RadioButton
                         android:id="@+id/businessCategory"
@@ -100,8 +99,8 @@
                         android:paddingTop="4dp"
                         android:paddingRight="12dp"
                         android:paddingBottom="4dp"
-                        android:tag="@string/category_business"
-                        android:text="Business" />
+                        android:tag="@string/tag_category_business"
+                        android:text="@string/category_business" />
 
                     <RadioButton
                         android:id="@+id/healthCategory"
@@ -115,8 +114,8 @@
                         android:paddingTop="4dp"
                         android:paddingRight="12dp"
                         android:paddingBottom="4dp"
-                        android:tag="@string/category_health"
-                        android:text="Health" />
+                        android:tag="@string/tag_category_health"
+                        android:text="@string/category_health" />
 
                     <RadioButton
                         android:id="@+id/scienceCategory"
@@ -130,8 +129,8 @@
                         android:paddingTop="4dp"
                         android:paddingRight="12dp"
                         android:paddingBottom="4dp"
-                        android:tag="@string/category_science"
-                        android:text="Science" />
+                        android:tag="@string/tag_category_science"
+                        android:text="@string/category_science" />
 
                     <RadioButton
                         android:id="@+id/sportsCategory"
@@ -146,7 +145,7 @@
                         android:paddingRight="12dp"
                         android:paddingBottom="4dp"
                         android:tag="@string/category_sports"
-                        android:text="Sports" />
+                        android:text="@string/tag_category_sports" />
 
                     <RadioButton
                         android:id="@+id/technologyCategory"
@@ -160,8 +159,8 @@
                         android:paddingTop="4dp"
                         android:paddingRight="12dp"
                         android:paddingBottom="4dp"
-                        android:tag="@string/category_technology"
-                        android:text="Technology" />
+                        android:tag="@string/tag_category_technology"
+                        android:text="@string/category_technology" />
                 </RadioGroup>
             </LinearLayout>
         </HorizontalScrollView>
