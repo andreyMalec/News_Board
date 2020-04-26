@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.newsFragment.NewsFragment">
+    tools:context=".ui.news.NewsFragment">
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/swipeRefreshLayout"
@@ -71,7 +71,7 @@
                         android:paddingTop="4dp"
                         android:paddingRight="12dp"
                         android:paddingBottom="4dp"
-                        android:tag="@string/tag_category_general"
+                        android:tag="@string/category_general"
                         android:text="@string/category_general" />
 
                     <RadioButton
@@ -88,7 +88,7 @@
                         android:paddingTop="4dp"
                         android:paddingRight="12dp"
                         android:paddingBottom="4dp"
-                        android:tag="@string/tag_category_entertainment"
+                        android:tag="@string/category_entertainment"
                         android:text="@string/category_entertainment" />
 
                     <RadioButton
@@ -106,7 +106,7 @@
                         android:paddingTop="4dp"
                         android:paddingRight="12dp"
                         android:paddingBottom="4dp"
-                        android:tag="@string/tag_category_business"
+                        android:tag="@string/category_business"
                         android:text="@string/category_business" />
 
                     <RadioButton
@@ -124,7 +124,7 @@
                         android:paddingTop="4dp"
                         android:paddingRight="12dp"
                         android:paddingBottom="4dp"
-                        android:tag="@string/tag_category_health"
+                        android:tag="@string/category_health"
                         android:text="@string/category_health" />
 
                     <RadioButton
@@ -142,7 +142,7 @@
                         android:paddingTop="4dp"
                         android:paddingRight="12dp"
                         android:paddingBottom="4dp"
-                        android:tag="@string/tag_category_science"
+                        android:tag="@string/category_science"
                         android:text="@string/category_science" />
 
                     <RadioButton
@@ -161,7 +161,7 @@
                         android:paddingRight="12dp"
                         android:paddingBottom="4dp"
                         android:tag="@string/category_sports"
-                        android:text="@string/tag_category_sports" />
+                        android:text="@string/category_sports" />
 
                     <RadioButton
                         android:id="@+id/technologyCategory"
@@ -180,7 +180,7 @@
                         android:paddingTop="4dp"
                         android:paddingRight="12dp"
                         android:paddingBottom="4dp"
-                        android:tag="@string/tag_category_technology"
+                        android:tag="@string/category_technology"
                         android:text="@string/category_technology" />
                 </RadioGroup>
             </LinearLayout>

@@ -10,6 +10,6 @@ enum class Category(val value: String) {
     Technology("technology");
 
     companion object {
-        fun from(findValue: String): Category = Category.values().first { it.value == findValue }
+        fun from(findValue: String): Category = values().first { it.value == findValue.toLowerCase() }
     }
 }

@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.proj.newsboard.R
+import com.proj.newsboard.ui.navigation.DrawerNavigator
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.support.HasSupportFragmentInjector
 import kotlinx.android.synthetic.main.activity_main.*
@@ -27,7 +28,7 @@ class MainActivity: AppCompatActivity(), HasSupportFragmentInjector {
         viewModelFactory
     }
 
-    private val navigator = SupportAppNavigator(
+    private val navigator = DrawerNavigator(
         this,
         supportFragmentManager,
         R.id.mainFrame
@@ -50,16 +51,18 @@ class MainActivity: AppCompatActivity(), HasSupportFragmentInjector {
         setContentView(R.layout.activity_main)
 
         viewModel.init()
-        setNavListener()
+        initNavListener()
     }
 
-    private fun setNavListener() {
+    private fun initNavListener() {
         navView.setNavigationItemSelectedListener { item ->
             when(item.itemId) {
                 R.id.nav_news -> {
                     viewModel.onNewsClick()
                 }
-                R.id.nav_settings -> {}
+                R.id.nav_settings -> {
+                    viewModel.onSettingsClick()
+                }
             }
             mainDrawerLayout.closeDrawers()
             true

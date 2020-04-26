@@ -17,14 +17,6 @@
     <string name="category_sports">Sports</string>
     <string name="category_technology">Technology</string>
 
-    <string name="tag_category_business">business</string>
-    <string name="tag_category_entertainment">entertainment</string>
-    <string name="tag_category_general">general</string>
-    <string name="tag_category_health">health</string>
-    <string name="tag_category_science">science</string>
-    <string name="tag_category_sports">sports</string>
-    <string name="tag_category_technology">technology</string>
-
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
 </resources>

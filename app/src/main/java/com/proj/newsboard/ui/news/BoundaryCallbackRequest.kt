@@ -1,4 +1,4 @@
-package com.proj.newsboard.ui.newsFragment
+package com.proj.newsboard.ui.news
 
 import com.proj.newsboard.service.newtwork.request.ApiRequest
 

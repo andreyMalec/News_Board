@@ -13,4 +13,8 @@ class MainViewModel @Inject constructor(private val router: Router) : ViewModel(
     fun onNewsClick() {
         router.replaceScreen(Screens.News)
     }
+
+    fun onSettingsClick() {
+        router.replaceScreen(Screens.Settings)
+    }
 }

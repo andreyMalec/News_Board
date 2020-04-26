@@ -1,4 +1,4 @@
-package com.proj.newsboard.ui.newsFragment
+package com.proj.newsboard.ui.news
 
 import android.os.Bundle
 import android.view.*
@@ -77,6 +77,13 @@ class NewsFragment: Fragment(), Injectable {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
+        initDrawer()
+        initListeners()
+        initRecycler()
+        initSwipeRefresh()
+    }
+
+    private fun initDrawer() {
         val main = (activity as AppCompatActivity)
 
         main.setSupportActionBar(toolbar)
@@ -93,7 +100,14 @@ class NewsFragment: Fragment(), Injectable {
         )
         drawerLayout.addDrawerListener(drawerToggle)
         drawerToggle.syncState()
+    }
 
+    private fun initListeners() {
+        initViewModelListeners()
+        initCategoryListeners()
+    }
+
+    private fun initViewModelListeners() {
         viewModel.articles.observe(viewLifecycleOwner, Observer {
             adapter.submitList(it)
         })
@@ -101,9 +115,21 @@ class NewsFragment: Fragment(), Injectable {
         viewModel.datePickerVisibility.observe(viewLifecycleOwner, Observer {
             datePicker?.isVisible = viewModel.datePickerVisibility.value!!
 
-            if (viewModel.datePickerVisibility.value == true) categoryLayout.clearCheck()
+            if (viewModel.datePickerVisibility.value == true)
+                categoryLayout.clearCheck()
         })
+    }
 
+    private fun initCategoryListeners() {
+        for (category in categoryLayout.children) {
+            category.setOnClickListener {
+                viewModel.loadCategory(Category.from(it.tag.toString()))
+                it.startAnimation(AnimationUtils.loadAnimation(context, R.anim.category_click_animation))
+            }
+        }
+    }
+
+    private fun initRecycler() {
         newsRecycler.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
         newsRecycler.adapter = adapter
         newsRecycler.scrollToPosition(0)
@@ -113,18 +139,13 @@ class NewsFragment: Fragment(), Injectable {
                 if (positionStart == 0) newsRecycler.scrollToPosition(0)
             }
         })
+    }
 
+    private fun initSwipeRefresh() {
         swipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary)
         swipeRefreshLayout.setOnRefreshListener {
             viewModel.updateNews()
             swipeRefreshLayout.isRefreshing = false
-        }
-
-        for (category in categoryLayout.children) {
-            category.setOnClickListener {
-                viewModel.loadCategory(Category.from(it.tag.toString()))
-                it.startAnimation(AnimationUtils.loadAnimation(context, R.anim.category_click_animation))
-            }
         }
     }
 }

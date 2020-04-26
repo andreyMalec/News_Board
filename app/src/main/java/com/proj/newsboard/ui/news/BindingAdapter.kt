@@ -1,4 +1,4 @@
-package com.proj.newsboard.ui.newsFragment
+package com.proj.newsboard.ui.news
 
 import android.content.Intent
 import android.net.Uri

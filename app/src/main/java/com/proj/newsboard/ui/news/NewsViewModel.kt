@@ -1,6 +1,5 @@
-package com.proj.newsboard.ui.newsFragment
+package com.proj.newsboard.ui.news
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel

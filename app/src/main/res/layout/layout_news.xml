@@ -7,8 +7,8 @@
             type="com.proj.newsboard.model.Article" />
         <variable
             name="clickHandler"
-            type="com.proj.newsboard.ui.newsFragment.BindingAdapter.ClickHandler" />
-        <import type="com.proj.newsboard.ui.newsFragment.BindingAdapter" />
+            type="com.proj.newsboard.ui.news.BindingAdapter.ClickHandler" />
+        <import type="com.proj.newsboard.ui.news.BindingAdapter" />
         <import type="android.view.View" />
     </data>
 

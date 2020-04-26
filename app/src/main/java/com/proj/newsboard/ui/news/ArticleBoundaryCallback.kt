@@ -1,15 +1,12 @@
-package com.proj.newsboard.ui.newsFragment
+package com.proj.newsboard.ui.news
 
 import android.util.Log
 import androidx.paging.PagedList
-import com.proj.newsboard.service.newtwork.api.NewsApi
 import com.proj.newsboard.model.Article
 import com.proj.newsboard.repo.NewsRepo
-import com.proj.newsboard.service.localDb.ArticlesDatabase
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import java.util.concurrent.Executors
 
 class ArticleBoundaryCallback(
     var request: BoundaryCallbackRequest,
